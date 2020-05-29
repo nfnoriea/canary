@@ -36,31 +36,76 @@ class MoodEntryScatterAnalysisTest {
 
     @Test
     fun comments_whenThereArentManyMoodEntries_encourageMoreMoodLogging() {
-        fail("If the person hasn't logged their mood much, " +
-                "it wouldn't be very accurate to try to do any analysis." +
-                "So choose a minimum number of entries you think you need to make an analysis " +
-                "and produce a message encouraging more logging if there are fewer entries than that.")
+        val fewMoodEntries = arrayListOf<MoodEntry>(
+            MoodEntry(Mood.COPING,1L, "Note", "EATING"),
+            MoodEntry(Mood.ELATED, 4L, "Note", "EATING")
+        )
+
+        val commentText = systemUnderTest.commentOn(fewMoodEntries)
+        assertEquals(commentText, MoodEntryScatterAnalysis.COMMENT_MINIMUM_ENTRIES)
     }
 
     @Test
     fun comments_whenMoodIsImproving_mentionThatMoodIsImproving() {
-        fail("If the person's mood, in general, is better lately than it was earlier in the week " +
-                "produce a message mentioning it. " +
-                "You get to decide how you want to measure this.")
+
+        val increasingMoodEntries = arrayListOf<MoodEntry>(
+            MoodEntry(Mood.ELATED,1L, "Note", "EATING"),
+            MoodEntry(Mood.COPING,2L, "Note", "EATING"),
+            MoodEntry(Mood.NEUTRAL,3L, "Note", "EATING"),
+            MoodEntry(Mood.NEUTRAL,4L, "Note", "EATING"),
+            MoodEntry(Mood.DOWN,5L, "Note", "EATING"),
+            MoodEntry(Mood.UPSET, 6L, "Note", "EATING")
+        )
+
+
+        val commentText = systemUnderTest.commentOn(increasingMoodEntries)
+
+        assertEquals(commentText,MoodEntryScatterAnalysis.COMMENT_INCREASING_MOOD)
+
+//        fail("If the person's mood, in general, is better lately than it was earlier in the week " +
+//                "produce a message mentioning it. " +
+//                "You get to decide how you want to measure this.")
+//        // MEASURE by taking last 3 (d, d-1, d-2) days avg and compare to 3 day average from
+        // d-4,d-5,d-6
     }
 
     @Test
     fun comments_whenMoodIsDeclining_mentionThatMoodIsDeclining() {
-        fail("If the person's mood, in general, is not as good lately as it was earlier in the week " +
-                "produce a message mentioning it. " +
-                "You get to decide how you want to measure this.")
+
+        val decreasingMoodEntries = arrayListOf<MoodEntry>(
+            MoodEntry(Mood.ELATED,6L, "Note", "EATING"),
+            MoodEntry(Mood.COPING,5L, "Note", "EATING"),
+            MoodEntry(Mood.NEUTRAL,4L, "Note", "EATING"),
+            MoodEntry(Mood.NEUTRAL,3L, "Note", "EATING"),
+            MoodEntry(Mood.DOWN,2L, "Note", "EATING"),
+            MoodEntry(Mood.UPSET, 1L, "Note", "EATING")
+        )
+
+        val commentText = systemUnderTest.commentOn(decreasingMoodEntries)
+
+        assertEquals(commentText, MoodEntryScatterAnalysis.COMMENT_DECREASING_MOOD)
+//        fail("If the person's mood, in general, is not as good lately as it was earlier in the week " +
+//                "produce a message mentioning it. " +
+//                "You get to decide how you want to measure this.")
     }
 
     @Test
     fun comments_whenThereIsOneOutlierMood_mentionAnyNotesFromThatMood() {
-        fail("If the person's mood, in general, is stable, and there is ONE outlier, " +
-                "produce a message containing the notes for that mood." +
-                "You get to decide how you want to go about this.")
+
+        val outlierMoodEntries = arrayListOf<MoodEntry>(
+            MoodEntry(Mood.NEUTRAL,6L, "Note", "EATING"),
+            MoodEntry(Mood.NEUTRAL,5L, "Note", "EATING"),
+            MoodEntry(Mood.NEUTRAL,4L, "Note", "EATING"),
+            MoodEntry(Mood.NEUTRAL,3L, "Note", "EATING"),
+            MoodEntry(Mood.ELATED,2L, "I walked the dog today and won the lottery!", "EATING"),
+            MoodEntry(Mood.NEUTRAL, 1L, "Note", "EATING")
+        )
+
+        val commentText = systemUnderTest.commentOn(outlierMoodEntries)
+        assertEquals(commentText, MoodEntryScatterAnalysis.COMMENT_OUTLIER_MOOD)
+//        fail("If the person's mood, in general, is stable, and there is ONE outlier, " +
+//                "produce a message containing the notes for that mood." +
+//                "You get to decide how you want to go about this.")
     }
 
 

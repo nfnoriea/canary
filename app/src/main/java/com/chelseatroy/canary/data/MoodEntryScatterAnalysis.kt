@@ -1,6 +1,7 @@
 package com.chelseatroy.canary.data
 
 class MoodEntryScatterAnalysis() {
+
     fun getYPositionFor(moodEntry: MoodEntry): Float {
         var height = 0f
         when (moodEntry.mood) {
@@ -26,7 +27,39 @@ class MoodEntryScatterAnalysis() {
     }
 
     fun commentOn(moodEntries: List<MoodEntry>): String {
+
+        if(hasMinimumEntries(moodEntries.count())) {
+            return COMMENT_MINIMUM_ENTRIES
+        }
+        //else if ( )
+
         return "This text box is pretty useless so far. It would be great if this text box contained some useful information " +
                 "about the trends in my mood, wouldn't it?"
+    }
+
+    private fun hasMinimumEntries(numEntries: Int): Boolean {
+        return numEntries >= MINIMUM_ENTRIES
+    }
+
+    private fun hasIncreasingEntries(moodEntries: List<MoodEntry>): Boolean {
+        return true
+    }
+
+    private fun hasDecreasingEntries(moodEntries: List<MoodEntry>): Boolean {
+        return true
+    }
+
+    private fun hasOutlierEntries(moodEntries: List<MoodEntry>): Boolean {
+        return true
+
+    }
+
+    companion object {
+        const val MINIMUM_ENTRIES = 5
+        const val COMMENT_MINIMUM_ENTRIES = "Not enough data to create graph. Try adding more entries!"
+        const val COMMENT_INCREASING_MOOD = ""
+        const val COMMENT_DECREASING_MOOD = ""
+        const val COMMENT_OUTLIER_MOOD = ""
+
     }
 }

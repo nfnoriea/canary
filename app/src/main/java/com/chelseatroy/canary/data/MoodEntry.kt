@@ -38,6 +38,8 @@ class MoodEntry(mood: Mood) {
             return dateFormat.format(calendar.getTime())
         }
 
+
+
         @JvmStatic
         fun formatForDatabase(pastimes: ArrayList<Pastime>): String {
             return pastimes.joinToString { it.toString() }
